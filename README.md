@@ -10,7 +10,7 @@ This access level runs a simple SQL script and uses access to the DB console to 
 
 ### observations from dbconsole
 
-The three values of memory%, CPU%, and QPS are meant to be gathered from the DB console with the customer and CEA.  This ensures the customer works with the CEA to gather usage information from their clusters.
+The three values of **Memory%**, **CPU%**, and **QPS** are meant to be gathered from the DB console with the customer and CEA.  This ensures the customer works with the CEA to gather usage information from their clusters.
 
 ![dbconsole observations](dbconsole_observations.png)
 
@@ -45,7 +45,7 @@ Summary of Cluster Statistics via SQL...
 ... Send Sample File to Cockroach Enterprise Architect : 20221012_ca54246b-8028-4aac-8159-0056ea5e25eb.tsv
 ```
 
-The tsv file created is finally uploaded to the usage-selfhosted Cockroach Cloud cluster into the cluster_usage table.  The goal is to make this an automated process, but for the initial phase, the tsv files are simply added to the #usage_selfhosted slack channel for each cluster.
+The tsv file created is finally uploaded to the usage-selfhosted Cockroach Cloud cluster into the cluster_usage table.  The goal is to make this an automated process, but for the initial phase, the tsv files are simply added to the [#usage_selfhosted](https://cockroachlabs.slack.com/archives/C046A2E22BC) slack channel for each cluster.
 
 ```sql
  CREATE TABLE cluster_usage (
