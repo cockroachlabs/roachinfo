@@ -2,12 +2,12 @@
 
 export port=26258
 export host=localhost
+
+# export crdbsql="cockroach sql --host ${host} --set "show_times=false" --format table --certs-dir ./certs"
+export crdbsql="cockroach sql --host ${host} --set "show_times=false" --format table --format table --insecure"
+export tempsql=$(mktemp /tmp/tempsql.XXXXXX)
 export sample_date=`date '+%Y%m%d'|sed 's/^ //g'`
 
-# export crdbsql="./cockroach sql --host ${host} --set "show_times=false" --format table --certs-dir ./certs"
-export crdbsql="cockroach sql --host ${host} --set "show_times=false" --format table --format table --insecure"
-export crdbtsdump="cockroach debug tsdump --host ${host} --format csv --insecure --from ${t1} --to ${t2}"
-export tempsql=$(mktemp /tmp/tempsql.XXXXXX)
 
 # function to get one return value from SQL
 getval () {
@@ -87,13 +87,12 @@ select sizeGB from tt;
 EOF
 export TTsize=`exec ${crdbsql} -f ${tempsql} | getval`
 
-echo "Please enter some observations from the DB console..."
-echo ""
+echo "Please enter some observations from DB console.."
 read -p "CPU% peak observation : " cpuPct
 read -p "Memory% peak observation : " memPct
+read -p "IOPS peak observation : " iops
 read -p "QPS peak observation : " qps
 
-echo ""
 echo "Summary of Cluster Statistics via SQL..."
 echo ""
 echo "              Sample Date : "${sample_date}
@@ -108,10 +107,24 @@ echo "        Largest Table(GB) : "${TTsize}
 echo "              Changefeeds : "${changefeedCnt}
 echo "    CPU% peak observation : "${cpuPct}
 echo " Memory% peak observation : "${memPct}
+echo "    IOPS peak observation : "${iops}
 echo "     QPS peak observation : "${qps}
 echo ""
 
-export outfile=${sample_date}_${cid}.tsv
-echo "... Send Sample File to Cockroach Enterprise Architect : "${outfile}
-echo -e "date\tClusterId\tOrganization\tVersion\tBuild\tNodes\tvCPU\tDiskGB\tTableGB\tChangfeeds\tcpuPCT\tmemPct\tqps" > ${outfile}
-echo -e ${sample_date}"\t"${cid}"\t"${org}"\t"${ver}"\t"${build}"\t"${nodeCount}"\t"${vCPUcount}"\t"${spaceTotalGB}"\t"${TTsize}"\t"${changefeedCnt}"\t"${cpuPct}"\t"${memPct}"\t"$qps >> ${outfile}
+export outfilesql=${sample_date}_${cid}.sql
+echo "... Send Sample File to Cockroach Enterprise Architect : "${outfilesql}
+echo -e "INSERT INTO cluster_usage VALUES " > ${outfilesql}
+echo -e "('"${sample_date}"'," >> ${outfilesql}
+echo -e "'"${cid}"'," >> ${outfilesql}
+echo -e "'"${org}"'," >> ${outfilesql}
+echo -e "'"${ver}"'," >> ${outfilesql}
+echo -e "'"${build}"'," >> ${outfilesql}
+echo -e ""${nodeCount}"," >> ${outfilesql}
+echo -e ""${vCPUcount}"," >> ${outfilesql}
+echo -e ""${spaceTotalGB}"," >> ${outfilesql}
+echo -e ""${TTsize}"," >> ${outfilesql}
+echo -e ""${changefeedCnt}"," >> ${outfilesql}
+echo -e ""${cpuPct}"," >> ${outfilesql}
+echo -e ""${memPct}"," >> ${outfilesql}
+echo -e ""${iops}"," >> ${outfilesql}
+echo -e ""${qps}");" >> ${outfilesql}

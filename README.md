@@ -18,34 +18,35 @@ The three values of **Memory%**, **CPU%**, and **QPS** are meant to be gathered 
 
 ```bash
 ubuntu@ip-10-11-35-10:~$ ./roachinfo-light.sh
-Gathinging Cluster Information on Wed Oct 12 18:07:07 UTC 2022....
+Gathinging Cluster Information on Sun Oct 30 17:42:14 UTC 2022....
  
-Please enter some observations from the DB console…
- 
-CPU% peak observation : 25
-Memory% peak observation : 33
-QPS peak observation : 15000
- 
+Please enter some observations from DB console..
+CPU% peak observation : 70
+Memory% peak observation : 85
+IOPS peak observation : 1000
+QPS peak observation : 3000
 Summary of Cluster Statistics via SQL...
  
-              Sample Date : 20221012
-                ClusterID : ca54246b-8028-4aac-8159-0056ea5e25eb
+              Sample Date : 20221030
+                ClusterID : e7a5bf31-5f0e-4a56-9626-44e566b63514
              Organization : Cockroach Labs - Production Testing
-                  Version : v22.2.0-beta.3
-                    Build : CockroachDB CCL v22.2.0-beta.3 (x86_64-pc-linux-gnu, built 2022/10/10 18:21:25, go1.19.1)
+                  Version : v22.2.0-alpha.3-1366-g0a11b74e23
+                    Build : CockroachDB CCL v22.2.0-alpha.3-1366-g0a11b74e23 (x86_64-pc-linux-gnu, built 2022/10/20 23:39:26, go1.19.1)
+                 Platform : linux amd64
               Total Nodes : 9
                vCPU total : 72
-          Total Disk (GB) : 57
-        Largest Table(GB) : 17
+          Total Disk (GB) : 622
+        Largest Table(GB) : 323
               Changefeeds : 0
-    CPU% peak observation : 25
- Memory% peak observation : 33
-     QPS peak observation : 15000
+    CPU% peak observation : 70
+ Memory% peak observation : 85
+    IOPS peak observation : 1000
+     QPS peak observation : 3000
  
-... Send Sample File to Cockroach Enterprise Architect : 20221012_ca54246b-8028-4aac-8159-0056ea5e25eb.tsv
+... Send Sample File to Cockroach Enterprise Architect : 20221030_e7a5bf31-5f0e-4a56-9626-44e566b63514.sql
 ```
 
-The tsv file created is finally uploaded to the usage-selfhosted Cockroach Cloud cluster into the cluster_usage table.  The goal is to make this an automated process, but for the initial phase, the tsv files are simply added to the [#usage_selfhosted](https://cockroachlabs.slack.com/archives/C046A2E22BC) slack channel for each cluster.
+The **sql** file created is finally uploaded to the usage-selfhosted Cockroach Cloud cluster into the cluster_usage table.  The goal is to make this an automated process, but for the initial phase, the sql files are simply added to the [#usage_selfhosted](https://cockroachlabs.slack.com/archives/C046A2E22BC) slack channel for each cluster where the files are discovered and loaded.
 
 ```sql
  CREATE TABLE cluster_usage (
@@ -54,6 +55,7 @@ The tsv file created is finally uploaded to the usage-selfhosted Cockroach Cloud
    organization TEXT,
    version TEXT,
    build TEXT,
+   platform TEXT,
    node_count INT,
    vcpu_count INT,
    disk_gb INT,
@@ -61,6 +63,7 @@ The tsv file created is finally uploaded to the usage-selfhosted Cockroach Cloud
    changefeeds INT,
    cpu_pct INT,
    mem_pct INT,
+   iops_pct INT,
    qps INT,
    PRIMARY KEY (sample_date, cluster_id)
  );
