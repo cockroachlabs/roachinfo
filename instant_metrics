@@ -1,0 +1,3 @@
+cr.node.sys.cpu.combined.percent-normalized
+cr.node.sys.rss
+cr.node.sys.host.disk.iopsinprogress

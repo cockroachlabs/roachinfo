@@ -1,0 +1,16 @@
+cr.node.sys.cpu.combined.percent-normalized
+cr.node.sys.rss
+cr.node.sys.host.disk.iopsinprogress
+cr.node.sys.host.disk.io.time
+cr.node.sys.host.disk.weightedio.time
+cr.node.sys.host.disk.read.bytes
+cr.node.sys.host.disk.read.count
+cr.node.sys.host.disk.read.time
+cr.node.sys.host.disk.write.bytes
+cr.node.sys.host.disk.write.count
+cr.node.sys.host.disk.write.time
+sql.delete.count
+sql.select.count
+sql.insert.count
+sql.update.count
+cr.node.sql.exec.latency-p99
